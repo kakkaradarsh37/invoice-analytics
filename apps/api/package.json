@@ -3,6 +3,7 @@
 "type": "module",
 "scripts": {
 "dev": "tsx src/index.ts",
+"postinstall": "prisma generate",
 "build": "tsc -p tsconfig.json",
 "start": "node dist/index.js",
 "prisma:gen": "prisma generate",

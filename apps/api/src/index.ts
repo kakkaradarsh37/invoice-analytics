@@ -5,6 +5,7 @@ import invoices from "./routes/invoices";
 import metrics from "./routes/metrics";
 import charts from "./routes/charts";
 import health from "./routes/health";
+import app from "./app";
 
 
 const app = express();
@@ -18,5 +19,11 @@ app.use("/metrics", metrics);
 app.use("/charts", charts);
 
 
-const port = Number(process.env.PORT || 4000);
-app.listen(port, () => console.log(`API listening on http://localhost:${port}`));
+// const port = Number(process.env.PORT || 4000);
+// app.listen(port, () => console.log(`API listening on http://localhost:${port}`));
+const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
+
+// Only used in local dev: Vercel won't run this file.
+app.listen(PORT, () => {
+  console.log(`API listening on http://localhost:${PORT}`);
+});
