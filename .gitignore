@@ -1,0 +1,29 @@
+<<<<<<< HEAD
+# dependencies
+node_modules/
+apps/**/node_modules/
+
+# build output
+.next/
+dist/
+out/
+
+# logs and env
+*.log
+.env
+.env.local
+=======
+# dependencies
+node_modules/
+apps/**/node_modules/
+
+# build output
+.next/
+dist/
+out/
+
+# logs and env
+*.log
+.env
+.env.local
+>>>>>>> ee14aeb (commit)

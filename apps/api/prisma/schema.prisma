@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://neondb_owner:npg_zGKw0iso6aBb@ep-billowing-cake-ahulj5r7-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+}
+
+
+model Vendor {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  taxId     String?  @db.VarChar(64)
+  address   String?
+  invoices  Invoice[]
+  createdAt DateTime @default(now())
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  address   String?
+  invoices  Invoice[]
+  createdAt DateTime @default(now())
+}
+
+model Invoice {
+  id           String    @id @default(cuid())
+  externalId   String?   @unique
+  number       String?
+  documentType String     @default("invoice")
+  currency     String?    @db.VarChar(8)
+  date         DateTime?
+  deliveryDate DateTime?
+  subTotal     Decimal?   @db.Decimal(18,2)
+  taxTotal     Decimal?   @db.Decimal(18,2)
+  total        Decimal    @db.Decimal(18,2)
+  vendorId     String
+  customerId   String?
+  vendor       Vendor     @relation(fields: [vendorId], references: [id])
+  customer     Customer?  @relation(fields: [customerId], references: [id])
+  payments     Payment[]
+  lineItems    LineItem[]
+  files        Document[]
+  status       String     @default("open")
+  uploadedAt   DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  @@index([date])
+  @@index([vendorId])
+}
+
+model LineItem {
+  id           String   @id @default(cuid())
+  invoiceId    String
+  srNo         Int?
+  description  String?
+  quantity     Decimal? @db.Decimal(18,4)
+  unitPrice    Decimal? @db.Decimal(18,4)
+  totalPrice   Decimal? @db.Decimal(18,2)
+  sachkonto    String?
+  buSchluessel String?
+  vatRate      Decimal? @db.Decimal(5,2)
+  vatAmount    Decimal? @db.Decimal(18,2)
+  category     String?
+  invoice      Invoice  @relation(fields: [invoiceId], references: [id])
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  invoiceId       String
+  dueDate         DateTime?
+  netDays         Int?
+  discountPct     Decimal? @db.Decimal(5,2)
+  discountDays    Int?
+  discountDue     DateTime?
+  bankAccount     String?
+  bic             String?
+  accountName     String?
+  discountedTotal Decimal? @db.Decimal(18,2)
+  invoice         Invoice  @relation(fields: [invoiceId], references: [id])
+}
+
+model Document {
+  id         String   @id @default(cuid())
+  invoiceId  String?
+  path       String
+  title      String?
+  fileType   String?
+  sizeBytes  Int?
+  status     String?
+  uploadedAt DateTime?
+  invoice    Invoice? @relation(fields: [invoiceId], references: [id])
+}
