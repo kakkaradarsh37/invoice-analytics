@@ -21,9 +21,20 @@ app.use("/charts", charts);
 
 // const port = Number(process.env.PORT || 4000);
 // app.listen(port, () => console.log(`API listening on http://localhost:${port}`));
-const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
+// const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
 
-// Only used in local dev: Vercel won't run this file.
-app.listen(PORT, () => {
-  console.log(`API listening on http://localhost:${PORT}`);
-});
+// // Only used in local dev: Vercel won't run this file.
+// app.listen(PORT, () => {
+//   console.log(`API listening on http://localhost:${PORT}`);
+// });
+const PORT = process.env.PORT || 4000;
+
+// ✅ Only start the server locally
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`✅ API running locally at http://localhost:${PORT}`);
+  });
+}
+
+// ✅ Export for Vercel serverless runtime
+export default app;
