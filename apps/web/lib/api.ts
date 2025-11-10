@@ -33,11 +33,11 @@
 // }
 
 // Log to confirm in runtime
-console.log("✅ NEXT_PUBLIC_VANNA_API_BASE_URL:", process.env.NEXT_PUBLIC_VANNA_API_BASE_URL);
+// console.log("✅ NEXT_PUBLIC_VANNA_API_BASE_URL:", process.env.NEXT_PUBLIC_VANNA_API_BASE_URL);
 
-const base =
-  process.env.NEXT_PUBLIC_VANNA_API_BASE_URL?.trim() ||
-  "https://invoice-analytics-backend-7qhnisuwz-kakkaradarsh37s-projects.vercel.app";
+// const base =
+//   process.env.NEXT_PUBLIC_VANNA_API_BASE_URL?.trim() ||
+//   "https://invoice-analytics-backend-7qhnisuwz-kakkaradarsh37s-projects.vercel.app";
 
 // export async function api(path: string) {
 //   const url = `${base}${path.startsWith("/") ? path : `/${path}`}`;
@@ -46,63 +46,34 @@ const base =
 //   if (!res.ok) throw new Error(`API ${res.status}: ${url}`);
 //   return res.json();
 // }
-// "use server";
-// console.log("✅ NEXT_PUBLIC_VANNA_API_BASE_URL:", process.env.NEXT_PUBLIC_VANNA_API_BASE_URL);
+"use server";
+console.log("✅ NEXT_PUBLIC_VANNA_API_BASE_URL:", process.env.NEXT_PUBLIC_VANNA_API_BASE_URL);
 
-// // const base =
-// //   process.env.NEXT_PUBLIC_VANNA_API_BASE_URL?.trim() ||
-// //   "https://invoice-analytics-backend-7qhnisuwz-kakkaradarsh37s-projects.vercel.app";
+const base =
+  process.env.NEXT_PUBLIC_VANNA_API_BASE_URL?.trim() ||
+  "https://invoice-analytics-backend-7qhnisuwz-kakkaradarsh37s-projects.vercel.app";
 
-// const base = "https://invoice-analytics-backend-7qhnisuwz-kakkaradarsh37s-projects.vercel.app";
-
-
-// export async function api(path: string) {
-//   const url = `${base}${path.startsWith("/") ? path : `/${path}`}`;
-//   console.log("🔗 Fetching:", url);
-//   try {
-//     const res = await fetch(url, { cache: "no-store" });
-//     // const res = await fetch(url, { 
-//     //     next: { revalidate: 60 } });
-// //     const res = await fetch(url, {
-// //   ...(typeof window === "undefined"
-// //     ? { next: { revalidate: 60 } }
-// //     : { cache: "no-store" }),
-// // });
-
-
-//     if (!res.ok) {
-//       console.error(`❌ API ${res.status} for ${url}`);
-//       throw new Error(`API ${res.status}: ${url}`);
-//     }
-//     const data = await res.json();
-//     console.log(`✅ API OK ${url}`, JSON.stringify(data).slice(0, 100) + "...");
-//     return data;
-//   } catch (err) {
-//     console.error("🔥 API error:", err);
-//     throw err;
-//   }
-// }
-// console.log("🌍 FETCH CALLED FROM FRONTEND, BASE:", base);
-// console.log("🌍 Running fetch from server-side (Vercel)");
-// // console.log("🔗 Full URL:", url);
+//const base = "https://invoice-analytics-backend-7qhnisuwz-kakkaradarsh37s-projects.vercel.app";
 
 
 export async function api(path: string) {
   const url = `${base}${path.startsWith("/") ? path : `/${path}`}`;
-  console.log("🔗 Full URL:", url);
-
+  console.log("🔗 Fetching:", url);
   try {
-    const res = await fetch(url, {
-      ...(typeof window === "undefined"
-        ? { next: { revalidate: 60 } }
-        : { cache: "no-store" }),
-    });
+    const res = await fetch(url, { cache: "no-store" });
+    // const res = await fetch(url, { 
+    //     next: { revalidate: 60 } });
+//     const res = await fetch(url, {
+//   ...(typeof window === "undefined"
+//     ? { next: { revalidate: 60 } }
+//     : { cache: "no-store" }),
+// });
+
 
     if (!res.ok) {
       console.error(`❌ API ${res.status} for ${url}`);
       throw new Error(`API ${res.status}: ${url}`);
     }
-
     const data = await res.json();
     console.log(`✅ API OK ${url}`, JSON.stringify(data).slice(0, 100) + "...");
     return data;
@@ -111,6 +82,35 @@ export async function api(path: string) {
     throw err;
   }
 }
+console.log("🌍 FETCH CALLED FROM FRONTEND, BASE:", base);
+console.log("🌍 Running fetch from server-side (Vercel)");
+// console.log("🔗 Full URL:", url);
+
+
+// export async function api(path: string) {
+//   const url = `${base}${path.startsWith("/") ? path : `/${path}`}`;
+//   console.log("🔗 Full URL:", url);
+
+//   try {
+//     const res = await fetch(url, {
+//       ...(typeof window === "undefined"
+//         ? { next: { revalidate: 60 } }
+//         : { cache: "no-store" }),
+//     });
+
+//     if (!res.ok) {
+//       console.error(`❌ API ${res.status} for ${url}`);
+//       throw new Error(`API ${res.status}: ${url}`);
+//     }
+
+//     const data = await res.json();
+//     console.log(`✅ API OK ${url}`, JSON.stringify(data).slice(0, 100) + "...");
+//     return data;
+//   } catch (err) {
+//     console.error("🔥 API error:", err);
+//     throw err;
+//   }
+// }
 
 
 
