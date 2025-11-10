@@ -371,6 +371,7 @@
 //     </main>
 //   );
 // }
+import DashboardClient from "./DashboardClient";
 export const dynamic = "force-dynamic";
 
 import { api } from "../lib/api";
