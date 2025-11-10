@@ -371,6 +371,7 @@
 //     </main>
 //   );
 // }
+export const dynamic = "force-dynamic";
 
 import { api } from "../lib/api";
 import { OverviewCards } from "../components/cards";
