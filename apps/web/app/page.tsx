@@ -380,6 +380,9 @@ import SpendByCategory from "../components/charts/spend-by-category";
 import CashOutflow from "../components/charts/cash-outflow";
 import InvoicesByVendor from "../components/charts/invoices-by-vendor";
 
+console.log("🌍 FRONTEND BASE URL:", process.env.NEXT_PUBLIC_VANNA_API_BASE_URL);
+
+
 // ✅ Step 1: Define type interfaces for your data
 interface TrendData {
   ym: string;
