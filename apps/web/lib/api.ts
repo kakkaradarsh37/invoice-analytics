@@ -60,10 +60,8 @@ export async function api(path: string) {
   const url = `${base}${path.startsWith("/") ? path : `/${path}`}`;
   console.log("🔗 Fetching:", url);
   try {
-    // const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, { cache: "no-store" });
     //const res = await fetch(url, { next: { revalidate: 60 } });
-    const res = await (fetch as any)(url, { next: { revalidate: 60 } });
-
 
     if (!res.ok) {
       console.error(`❌ API ${res.status} for ${url}`);
