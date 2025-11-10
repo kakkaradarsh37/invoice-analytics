@@ -511,8 +511,15 @@ console.log("BASE_URL:", process.env.NEXT_PUBLIC_VANNA_API_BASE_URL);
 
 
 export default async function Page() {
+  try{
   const { trend, vendor, category, outflow, invoices } = await getData();
-
+  console.log("✅ Data loaded", {
+      trend: trend?.length,
+      vendor: vendor?.length,
+      category: category?.length,
+      outflow: outflow?.length,
+      invoices: invoices?.length,
+    });
   return (
     <main className="space-y-6">
       {/* KPI cards */}
@@ -576,6 +583,11 @@ export default async function Page() {
     </main>
     
   );
+}
+  catch (err) {
+    console.error("❌ Page crashed:", err);
+    return <div>Error loading data.</div>;
+  }
 }
 
 
