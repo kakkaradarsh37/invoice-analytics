@@ -1,11 +1,11 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import invoices from "./routes/invoices";
-import metrics from "./routes/metrics";
-import charts from "./routes/charts";
-import health from "./routes/health";
-import app from "./app";
+import invoices from "./routes/invoices.js";
+import metrics from "./routes/metrics.js";
+import charts from "./routes/charts.js";
+import health from "./routes/health.js";
+// import app from "./app.js";
 
 
 const app = express();

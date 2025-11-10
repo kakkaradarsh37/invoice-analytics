@@ -131,47 +131,96 @@
 //     res.status(500).json({ error: "Failed to load chart data" });
 //   }
 // });
-import { Router } from "express";
-import { prisma } from "../lib/prisma";
+// import { Router } from "express";
+// import { prisma } from "../lib/prisma.js";
+
+// const router = Router();
+
+// // 📊 Invoice Volume + Value Trend
+// router.get("/invoice-trend", async (req:any, res:any) => {
+//   try {
+//     const result = await prisma.invoice.groupBy({
+//       by: ["date"],
+//       _count: { id: true },
+//       _sum: { subTotal: true },
+//     });
+
+//     // Group by month-year
+//     const formatted = result
+//       .filter((r) => r.date)
+//       .map((r) => {
+//         const d = new Date(r.date);
+//         const ym = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+//         return {
+//           ym,
+//           volume: r._count.id,
+//           value: Number(r._sum.subTotal ?? 0),
+//         };
+//       })
+//       .reduce((acc, curr) => {
+//         const existing = acc.find((x) => x.ym === curr.ym);
+//         if (existing) {
+//           existing.volume += curr.volume;
+//           existing.value += curr.value;
+//         } else acc.push(curr);
+//         return acc;
+//       }, [] as any[]);
+
+//     res.json(formatted);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Failed to get invoice trend" });
+//   }
+// });
+import { Router, Request, Response } from "express";
+import { prisma } from "../lib/prisma.js";
 
 const router = Router();
 
 // 📊 Invoice Volume + Value Trend
-router.get("/invoice-trend", async (req, res) => {
+router.get("/invoice-trend", async (req: Request, res: Response): Promise<void> => {
   try {
+    // Fetch invoices grouped by date
     const result = await prisma.invoice.groupBy({
       by: ["date"],
       _count: { id: true },
       _sum: { subTotal: true },
     });
 
-    // Group by month-year
+    // Group and aggregate by year-month
     const formatted = result
-      .filter((r) => r.date)
+      // ✅ Filter out null dates (avoids `new Date(null)` crash)
+      .filter((r) => r.date !== null)
+      // ✅ Type r.date as Date (after filtering)
       .map((r) => {
-        const d = new Date(r.date);
+        const d = new Date(r.date as Date);
         const ym = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+
         return {
           ym,
           volume: r._count.id,
           value: Number(r._sum.subTotal ?? 0),
         };
       })
-      .reduce((acc, curr) => {
+      // ✅ Combine months with the same ym
+      .reduce((acc: any[], curr) => {
         const existing = acc.find((x) => x.ym === curr.ym);
         if (existing) {
           existing.volume += curr.volume;
           existing.value += curr.value;
-        } else acc.push(curr);
+        } else {
+          acc.push(curr);
+        }
         return acc;
-      }, [] as any[]);
+      }, []);
 
     res.json(formatted);
   } catch (err) {
-    console.error(err);
+    console.error("❌ Error fetching invoice trend:", err);
     res.status(500).json({ error: "Failed to get invoice trend" });
   }
 });
+
 
 
 // =====================

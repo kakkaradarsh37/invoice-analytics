@@ -70,8 +70,9 @@
 import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
-import { prisma } from "../src/lib/prisma";
-import { inferCategory } from "../src/lib/categories";
+import { prisma } from "../src/lib/prisma.js";
+import { inferCategory } from "../src/lib/categories.js";
+import { Prisma } from "@prisma/client";
 
 type AnyObj = Record<string, any>;
 
@@ -147,7 +148,7 @@ async function main() {
         deliveryDate: parseDate(invoiceV.deliveryDate?.value ?? invoiceV.deliveryDate),
         subTotal: toDec(summaryV.subTotal?.value ?? summaryV.subTotal),
         taxTotal: toDec(summaryV.totalTax?.value ?? summaryV.totalTax),
-        total: toDec(total),
+        total: toDec(total??0),
         vendorId: vendor.id,
         customerId: customer?.id,
         uploadedAt: parseDate(doc.createdAt?.$date ?? doc.createdAt),
@@ -184,7 +185,8 @@ async function main() {
           vatRate: toDec(i.vatRate),
           vatAmount: toDec(i.vatAmount),
           category: inferCategory({
-            Sachkonto: str(i.Sachkonto),
+            //Sachkonto: str(i.Sachkonto),
+            Sachkonto: i.Sachkonto ?? undefined,
             description: i.description,
           }),
         },
@@ -229,10 +231,15 @@ function parseDate(s?: string) {
   return isNaN(d.getTime()) ? null : d;
 }
 
-function toDec(n: any) {
-  if (n === undefined || n === null || n === "") return null;
+// function toDec(n: any) {
+//   if (n === undefined || n === null || n === "") return null;
+//   const num = Number(n);
+//   return Number.isFinite(num) ? num : null;
+// }
+function toDec(n: any): Prisma.Decimal {
+  if (n === undefined || n === null || n === "") return new Prisma.Decimal(0);
   const num = Number(n);
-  return Number.isFinite(num) ? num : null;
+  return new Prisma.Decimal(Number.isFinite(num) ? num : 0);
 }
 
 function numberOrNull(n: any) {
