@@ -372,7 +372,7 @@
 //   );
 // }
 
-import { api } from "../lib/fetcher";
+import { api } from "../lib/api";
 import { OverviewCards } from "../components/cards";
 import InvoiceTrend from "../components/charts/invoice-trend";
 import SpendByVendor from "../components/charts/spend-by-vendor";
