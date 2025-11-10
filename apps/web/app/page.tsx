@@ -507,6 +507,7 @@ async function getData(): Promise<{
   };
 }
 
+console.log("BASE_URL:", process.env.NEXT_PUBLIC_VANNA_API_BASE_URL);
 
 
 export default async function Page() {
@@ -573,6 +574,7 @@ export default async function Page() {
         </div>
       </div>
     </main>
+    
   );
 }
 
