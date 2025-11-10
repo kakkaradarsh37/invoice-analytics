@@ -75,6 +75,8 @@ export async function api(path: string) {
     throw err;
   }
 }
+console.log("🌍 FETCH CALLED FROM FRONTEND, BASE:", base);
+
 
 
 
